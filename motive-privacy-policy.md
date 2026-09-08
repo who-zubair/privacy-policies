@@ -71,7 +71,9 @@ Android's application sandboxing ensures that no other standard application inst
 
 ## 6. Android Device Permissions and Usage
 
-Motive adheres strictly to the Principle of Least Privilege. We only declare and request the minimum device permissions necessary to execute local user-initiated features.
+Motive adheres strictly to the Principle of Least Privilege. We only declare and request device permissions necessary to execute features you explicitly use.
+
+### 6.1 Currently Active Permissions
 
 | Permission | Technical Identifier | Purpose & Justification |
 | :--- | :--- | :--- |
@@ -80,7 +82,20 @@ Motive adheres strictly to the Principle of Least Privilege. We only declare and
 | **Receive Boot Completed** | `android.permission.RECEIVE_BOOT_COMPLETED` | Allows Motive’s local alarm receiver to reschedule your configured daily reminder alarms automatically after your device restarts or powers on. |
 | **Exact Alarm Scheduling** | `android.permission.SCHEDULE_EXACT_ALARM` / `USE_EXACT_ALARM` | Ensures local reminder notifications fire precisely at your specified reminder time rather than being batched or delayed by system Doze modes. |
 
-**Important Note on Network Access:** In production release builds, Motive does **not** declare or request the `android.permission.INTERNET` permission for data exfiltration or remote synchronization. The app is physically incapable of transmitting your habit records over the internet.
+### 6.2 Potential Future & Optional Permissions
+
+As Motive evolves, future updates may introduce optional features that require additional system permissions. These will always be strictly optional and prompted only when you explicitly interact with the corresponding feature:
+
+| Permission / Capability | Technical Identifier | Future Feature Context |
+| :--- | :--- | :--- |
+| **Battery Optimization Exemption** | `android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` | To prevent aggressive vendor background process killers from silencing exact habit reminder alarms or stalling home screen widget refreshes. |
+| **Biometric Authentication (App Lock)** | `android.permission.USE_BIOMETRIC` / `USE_FINGERPRINT` | For an optional privacy lock feature allowing users to secure their personal habit diaries with device fingerprint or face unlock. Biometric verification occurs strictly within the local Android Secure Enclave. |
+| **Physical Activity / Step Tracking** | `android.permission.ACTIVITY_RECOGNITION` | If automatic habit tracking (such as daily walking step goals or workouts) via Google Health Connect or device step sensors is enabled by the user. |
+| **Google Play In-App Billing** | `com.android.vending.BILLING` | In the event of optional tip jars, developer donations, or premium aesthetic themes. All financial transactions are processed securely through Google Play without developer access to payment credentials. |
+| **Photo / Media Picker (Attachment)** | Android Photo Picker / Scoped Media | If custom habit cover images, icon uploads, or photo-proof completion logging are introduced. Uses Android's system photo picker without requiring broad storage permissions. |
+| **Optional Cloud / Drive Backup** | `android.permission.INTERNET` (Strictly Opt-In) | If an optional cloud sync or direct Google Drive backup feature is added. Data transfer will only occur upon explicit user initiation and authorization to the user's personal cloud storage. |
+
+**Important Note on Network Access:** In current release builds, Motive does **not** declare or request the `android.permission.INTERNET` permission. The app operates 100% locally and is physically incapable of transmitting your habit records over the internet.
 
 ---
 
